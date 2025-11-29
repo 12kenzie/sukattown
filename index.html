@@ -689,8 +689,33 @@
             </div>
 
             <!-- Projected Bill Widget (Principal Only) -->
-
-          </div>
+            <div class="card bill-widget" id="billWidget" style="margin-top:18px">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                <div>
+                  <div style="font-weight:700;font-size:14px;color:#0b1220;margin-bottom:4px">Projected Monthly Bill</div>
+                  <div style="font-size:32px;font-weight:800;color:#2e7d32;margin:8px 0" id="projectedBill">₱1,650.00</div>
+                  <div style="font-size:13px;color:var(--muted)">Based on current usage trends</div>
+                </div>
+                <div class="tile-icon" style="background:linear-gradient(135deg,#4caf50,#2e7d32)">
+                  <i class="fa-solid fa-peso-sign" aria-hidden="true"></i>
+                </div>
+              </div>
+            
+              <div style="display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid rgba(15,23,36,0.06)">
+                <div>
+                  <div style="font-size:12px;color:var(--muted)">Today's Cost</div>
+                  <div style="font-weight:700;margin-top:4px" id="todayCost">₱120.50</div>
+                </div>
+                <div>
+                  <div style="font-size:12px;color:var(--muted)">This Month</div>
+                  <div style="font-weight:700;margin-top:4px" id="monthCost">₱1,200.00</div>
+                </div>
+                <div>
+                  <div style="font-size:12px;color:var(--muted)">Days Remaining</div>
+                  <div style="font-weight:700;margin-top:4px" id="daysRemaining">15 days</div>
+                </div>
+              </div>
+            </div>
 
           <!-- Usage trend / mini cards -->
           <div class="card usage">
@@ -782,8 +807,12 @@
             <div style="margin-bottom:16px;padding:12px;background:rgba(107,83,245,0.08);border-radius:10px">
               <div style="font-size:13px;color:var(--muted);margin-bottom:8px" class="">Account Type</div>
               <div style="display:flex;gap:8px">
-
-
+                <button onclick="setAccountType('principal')" id="principalBtn" style="flex:1;padding:8px;border-radius:6px;border:2px solid var(--accent-1);background:var(--accent-1);color:white;font-weight:600;cursor:pointer;transition:all 0.2s">
+                  Principal
+                </button>
+                <button onclick="setAccountType('non-principal')" id="nonPrincipalBtn" style="flex:1;padding:8px;border-radius:6px;border:2px solid #ddd;background:white;color:#666;font-weight:600;cursor:pointer;transition:all 0.2s">
+                  Non-Principal
+                </button>
               </div>
             </div>
 
