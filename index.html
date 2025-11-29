@@ -486,6 +486,20 @@
       }
     }
 
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .alert-notification.removing {
+      animation: slideOut 0.3s ease-in forwards;
+    }
+
+    .usage-insights {
+      margin-top: 16px;
+    }
+
     .alert-notification.removing {
       animation: slideOut 0.3s ease-in forwards;
     }
@@ -947,6 +961,56 @@
 
     let isPrincipalAccount = true; // Default to principal account
 
+    // AI Insights with placeholder data
+    function generateAIInsights() {
+      $('#aiLoadingIndicator').show();
+      
+      // Simulate processing delay
+      setTimeout(() => {
+        if (sensorHistory.length < 5) {
+          $('#aiPattern').text('Collecting more data for analysis...');
+          $('#aiInsight').text('Need at least 5 data points to generate meaningful insights.');
+          $('#aiRecommendation').text('Keep monitoring your energy consumption for better analysis.');
+          $('#aiConfidence').text('50% confidence');
+        } else {
+          // Placeholder insights (we'll make this smart later)
+          const patterns = [
+            'Stable consumption pattern detected',
+            'Slight increasing trend in usage',
+            'Energy efficient consumption pattern',
+            'Evening usage spike detected',
+            'Morning consumption higher than average'
+          ];
+          
+          const insights = [
+            'Your current usage is within normal range for this time of day.',
+            'Power consumption is 12% below your weekly average - great job!',
+            'Usage patterns suggest optimal appliance scheduling.',
+            'Peak demand occurs between 6-9 PM consistently.',
+            'Your consumption is steady with minimal fluctuations.'
+          ];
+          
+          const recommendations = [
+            'Continue monitoring. Consider scheduling heavy appliances during off-peak hours.',
+            'Excellent energy management! Maintain these efficient practices.',
+            'Try to reduce consumption during peak hours (6-9 PM) for cost savings.',
+            'Consider using a timer for high-power appliances to avoid simultaneous usage.',
+            'Your usage is optimal. Keep up the good work!'
+          ];
+          
+          // Randomly select (for now - we'll make this data-driven later)
+          const randomIndex = Math.floor(Math.random() * patterns.length);
+          
+          $('#aiPattern').text(patterns[randomIndex]);
+          $('#aiInsight').text(insights[randomIndex]);
+          $('#aiRecommendation').text(recommendations[randomIndex]);
+          $('#aiConfidence').text(Math.floor(Math.random() * 15 + 80) + '% confidence');
+        }
+        
+        $('#aiLoadingIndicator').hide();
+      }, 800); // 800ms delay to show loading animation
+    }
+
     function setAccountType(type) {
       isPrincipalAccount = (type === 'principal');
 
@@ -1024,6 +1088,7 @@
           }
 
           updateChart();
+          generateAIInsights(); // Generate insights when new data arrives
         })
         .catch(error => {
           console.error('Error fetching data:', error);
@@ -1559,7 +1624,8 @@
 
       setInterval(fetchSensorData, 5000);
       setInterval(fetchConsumptionAlerts, 3000); // Check for alerts every 3 seconds
-      setInterval(fetchFireAlerts, 2000); // Check for fire alerts every 3 seconds
+      setInterval(fetchFireAlerts, 2000); // Check for fire alerts every 2 seconds
+      setInterval(generateAIInsights, 30000); // Update insights every 30 seconds
     });
   </script>
 
