@@ -242,6 +242,12 @@
     }
 
     /* Top cards like reference */
+    .cards-top-three {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+    }
+    
     .cards-top {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -536,6 +542,10 @@
         grid-template-columns: 1fr;
       }
 
+      .cards-top-three {
+        grid-template-columns: 1fr 1fr;
+      }
+
       .topbar {
         grid-template-columns: 1fr;
         row-gap: 10px;
@@ -567,6 +577,10 @@
 
       .search {
         max-width: 100%
+      }
+
+      .cards-top-three {
+        grid-template-columns: 1fr;
       }
 
       .alert-container {
@@ -649,9 +663,9 @@
 
         <!-- LEFT: main cards -->
         <div>
-
-          <!-- top three tiles -->
-          <div class="cards-top">
+          
+          <!-- top three tiles in a row -->
+          <div class="cards-top-three">
             <div class="card big-tile consumption-tile">
               <div style="display:flex;align-items:flex-start;justify-content:space-between">
                 <div>
@@ -663,13 +677,13 @@
                   <i class="fa-solid fa-bolt" aria-hidden="true"></i>
                 </div>
               </div>
-
+          
               <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
                 <div style="font-size:13px;opacity:.95">Peak: <strong id="peakValue">35 kWh</strong></div>
                 <div style="font-size:13px;opacity:.95">Avg: <strong id="avgValue">18 kWh</strong></div>
               </div>
             </div>
-
+          
             <div class="card big-tile power-tile">
               <div style="display:flex;align-items:flex-start;justify-content:space-between">
                 <div>
@@ -681,71 +695,42 @@
                   <i class="fa-solid fa-plug" aria-hidden="true"></i>
                 </div>
               </div>
-
+          
               <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:6px">
                 <div style="text-align:right;font-size:13px">Frequency: <strong id="frequencyValue">60 Hz</strong></div>
                 <div style="text-align:right;font-size:13px">PF: <strong id="pfValue">0.95</strong></div>
               </div>
             </div>
-
+          
             <!-- Projected Bill Widget (Principal Only) -->
-            <div class="card bill-widget" id="billWidget" style="margin-top:18px">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+            <div class="card big-tile bill-widget" id="billWidget">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
                 <div>
-                  <div style="font-weight:700;font-size:14px;color:#0b1220;margin-bottom:4px">Projected Monthly Bill</div>
-                  <div style="font-size:32px;font-weight:800;color:#2e7d32;margin:8px 0" id="projectedBill">₱1,650.00</div>
-                  <div style="font-size:13px;color:var(--muted)">Based on current usage trends</div>
+                  <div class="tile-title" style="color:#0b1220">Projected Monthly Bill</div>
+                  <div class="tile-value" style="color:#2e7d32" id="projectedBill">₱1,650.00</div>
+                  <div class="tile-sub" style="color:var(--muted);opacity:1">Based on usage trends</div>
                 </div>
                 <div class="tile-icon" style="background:linear-gradient(135deg,#4caf50,#2e7d32)">
                   <i class="fa-solid fa-peso-sign" aria-hidden="true"></i>
                 </div>
               </div>
-            
-              <div style="display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid rgba(15,23,36,0.06)">
-                <div>
-                  <div style="font-size:12px;color:var(--muted)">Today's Cost</div>
-                  <div style="font-weight:700;margin-top:4px" id="todayCost">₱120.50</div>
+          
+              <div style="display:flex;justify-content:space-between;gap:8px">
+                <div style="text-align:center;flex:1">
+                  <div style="font-size:11px;color:var(--muted);opacity:0.9">Today</div>
+                  <div style="font-weight:700;margin-top:2px;font-size:14px" id="todayCost">₱120.50</div>
                 </div>
-                <div>
-                  <div style="font-size:12px;color:var(--muted)">This Month</div>
-                  <div style="font-weight:700;margin-top:4px" id="monthCost">₱1,200.00</div>
+                <div style="text-align:center;flex:1">
+                  <div style="font-size:11px;color:var(--muted);opacity:0.9">This Month</div>
+                  <div style="font-weight:700;margin-top:2px;font-size:14px" id="monthCost">₱1,200.00</div>
                 </div>
-                <div>
-                  <div style="font-size:12px;color:var(--muted)">Days Remaining</div>
-                  <div style="font-weight:700;margin-top:4px" id="daysRemaining">15 days</div>
+                <div style="text-align:center;flex:1">
+                  <div style="font-size:11px;color:var(--muted);opacity:0.9">Days Left</div>
+                  <div style="font-weight:700;margin-top:2px;font-size:14px" id="daysRemaining">15 days</div>
                 </div>
-              </div>
-            </div>
-
-          <!-- Usage trend / mini cards -->
-          <div class="card usage">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div style="font-weight:700">How's the consumption today?</div>
-              <div style="color:var(--muted);font-size:13px">Realtime • Live Data</div>
-            </div>
-
-            <!-- Chart.js consumption graph -->
-            <div style="margin-top:12px;padding:12px;background:linear-gradient(180deg,#fff,#fbfdff);border-radius:8px">
-              <canvas id="consumptionChart" height="96"></canvas>
-            </div>
-
-            <div class="mini-cards">
-              <div class="mini">
-                <p id="period1Label">Morning</p>
-                <strong id="period1Value">5 kWh</strong>
-              </div>
-              <div class="mini">
-                <p id="period2Label">Afternoon</p>
-                <strong id="period2Value">10 kWh</strong>
-              </div>
-              <div class="mini">
-                <p id="period3Label">Evening</p>
-                <strong id="period3Value">7 kWh</strong>
               </div>
             </div>
           </div>
-
-        </div>
 
         <!-- RIGHT: side column -->
         <aside class="side-col">
