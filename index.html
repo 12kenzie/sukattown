@@ -771,6 +771,65 @@
               </div>
             </div>
           </div>
+
+          <!-- AI Insights Box -->
+          <div class="card usage-insights">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+              <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent-1),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-size:18px">
+                <i class="fa-solid fa-brain"></i>
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:15px">AI-Powered Insights</div>
+                <div style="font-size:12px;color:var(--muted)">Pattern analysis • Smart recommendations</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div id="aiLoadingIndicator" style="display:none">
+                  <div style="width:18px;height:18px;border:2px solid rgba(107,83,245,0.3);border-top-color:var(--accent-1);border-radius:50%;animation:spin 1s linear infinite"></div>
+                </div>
+                <span id="aiConfidence" style="font-size:12px;color:var(--accent-1);font-weight:700;padding:4px 10px;background:rgba(107,83,245,0.1);border-radius:6px">85% confidence</span>
+              </div>
+            </div>
+
+            <div style="padding:16px;background:linear-gradient(135deg,rgba(107,83,245,0.06),rgba(163,78,242,0.04));border-radius:12px;border:1px solid rgba(107,83,245,0.12)">
+              <!-- Pattern Detected -->
+              <div style="margin-bottom:14px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                  <span style="font-size:20px">🔍</span>
+                  <strong style="font-size:13px;color:#0f1724">Pattern Detected:</strong>
+                </div>
+                <p id="aiPattern" style="margin:0;font-size:14px;line-height:1.5;color:#344054;padding-left:28px">
+                  Stable consumption pattern with slight evening peaks
+                </p>
+              </div>
+
+              <!-- Insight -->
+              <div style="margin-bottom:14px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                  <span style="font-size:20px">💡</span>
+                  <strong style="font-size:13px;color:#0f1724">Insight:</strong>
+                </div>
+                <p id="aiInsight" style="margin:0;font-size:14px;line-height:1.5;color:#344054;padding-left:28px">
+                  Your usage is steady at 5.2 kW, close to your average of 5.5 kW. Energy efficiency is good.
+                </p>
+              </div>
+
+              <!-- Recommendation -->
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                  <span style="font-size:20px">✨</span>
+                  <strong style="font-size:13px;color:#0f1724">Recommendation:</strong>
+                </div>
+                <p id="aiRecommendation" style="margin:0;font-size:14px;line-height:1.5;color:#344054;padding-left:28px">
+                  Maintain current usage patterns. Monitor for any unusual spikes during peak hours.
+                </p>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;padding:10px;background:rgba(107,83,245,0.05);border-radius:8px;display:flex;align-items:center;gap:8px">
+              <i class="fa-solid fa-circle-info" style="color:var(--accent-1);font-size:14px"></i>
+              <span style="font-size:12px;color:var(--muted)">Insights updated every 30 seconds using pattern recognition</span>
+            </div>
+          </div>
           
          </div>
         <!-- RIGHT: side column -->
