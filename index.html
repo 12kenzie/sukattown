@@ -957,56 +957,144 @@
 
     let isPrincipalAccount = true; // Default to principal account
 
-    // AI Insights with placeholder data
+    // AI Insights with REAL data analysis
     function generateAIInsights() {
       $('#aiLoadingIndicator').show();
       
-      // Simulate processing delay
       setTimeout(() => {
         if (sensorHistory.length < 5) {
           $('#aiPattern').text('Collecting more data for analysis...');
           $('#aiInsight').text('Need at least 5 data points to generate meaningful insights.');
           $('#aiRecommendation').text('Keep monitoring your energy consumption for better analysis.');
           $('#aiConfidence').text('50% confidence');
-        } else {
-          // Placeholder insights (we'll make this smart later)
-          const patterns = [
-            'Stable consumption pattern detected',
-            'Slight increasing trend in usage',
-            'Energy efficient consumption pattern',
-            'Evening usage spike detected',
-            'Morning consumption higher than average'
-          ];
-          
-          const insights = [
-            'Your current usage is within normal range for this time of day.',
-            'Power consumption is 12% below your weekly average - great job!',
-            'Usage patterns suggest optimal appliance scheduling.',
-            'Peak demand occurs between 6-9 PM consistently.',
-            'Your consumption is steady with minimal fluctuations.'
-          ];
-          
-          const recommendations = [
-            'Continue monitoring. Consider scheduling heavy appliances during off-peak hours.',
-            'Excellent energy management! Maintain these efficient practices.',
-            'Try to reduce consumption during peak hours (6-9 PM) for cost savings.',
-            'Consider using a timer for high-power appliances to avoid simultaneous usage.',
-            'Your usage is optimal. Keep up the good work!'
-          ];
-          
-          // Randomly select (for now - we'll make this data-driven later)
-          const randomIndex = Math.floor(Math.random() * patterns.length);
-          
-          $('#aiPattern').text(patterns[randomIndex]);
-          $('#aiInsight').text(insights[randomIndex]);
-          $('#aiRecommendation').text(recommendations[randomIndex]);
-          $('#aiConfidence').text(Math.floor(Math.random() * 15 + 80) + '% confidence');
+          $('#aiLoadingIndicator').hide();
+          return;
         }
         
+        // Analyze the actual data
+        const insights = analyzeConsumptionPattern();
+        
+        $('#aiPattern').text(insights.pattern);
+        $('#aiInsight').text(insights.insight);
+        $('#aiRecommendation').text(insights.recommendation);
+        $('#aiConfidence').text(insights.confidence + '% confidence');
+        
         $('#aiLoadingIndicator').hide();
-      }, 800); // 800ms delay to show loading animation
+      }, 800);
     }
 
+    // Smart pattern analysis function
+    function analyzeConsumptionPattern() {
+      // Extract power values from history (convert to kW)
+      const powerValues = sensorHistory.map(d => d.power / 1000);
+      const energyValues = sensorHistory.map(d => d.energy);
+      
+      // Calculate statistics
+      const avgPower = powerValues.reduce((a, b) => a + b, 0) / powerValues.length;
+      const maxPower = Math.max(...powerValues);
+      const minPower = Math.min(...powerValues);
+      const currentPower = powerValues[powerValues.length - 1];
+      const totalEnergy = energyValues[energyValues.length - 1];
+      
+      // Detect trend (is consumption increasing or decreasing?)
+      const trend = calculateTrend(powerValues);
+      
+      // Detect volatility (how much does it fluctuate?)
+      const volatility = calculateVolatility(powerValues);
+      
+      // Pattern detection logic
+      let pattern = '';
+      let insight = '';
+      let recommendation = '';
+      let confidence = 0;
+      
+      if (trend > 0.05) {
+        // Increasing consumption
+        pattern = 'Increasing consumption trend detected';
+        insight = `Your power usage is rising steadily (${(trend * 100).toFixed(1)}% per reading). Current: ${currentPower.toFixed(2)} kW, Average: ${avgPower.toFixed(2)} kW.`;
+        recommendation = 'Consider identifying high-power appliances currently in use. Turn off devices on standby mode.';
+        confidence = 85;
+      } 
+      else if (trend < -0.05) {
+        // Decreasing consumption
+        pattern = 'Decreasing consumption trend - Great job!';
+        insight = `Your energy usage is declining (${Math.abs(trend * 100).toFixed(1)}% reduction). You're using ${((avgPower - currentPower) / avgPower * 100).toFixed(1)}% less than average.`;
+        recommendation = 'Excellent energy management! Maintain these efficient practices.';
+        confidence = 88;
+      } 
+      else if (volatility > 0.3) {
+        // High fluctuation
+        pattern = 'High fluctuation in power usage';
+        insight = `Your consumption varies significantly (${(volatility * 100).toFixed(0)}% volatility). Range: ${minPower.toFixed(2)} - ${maxPower.toFixed(2)} kW.`;
+        recommendation = 'Irregular patterns detected. Check for power-hungry appliances cycling on/off frequently.';
+        confidence = 78;
+      } 
+      else if (currentPower > avgPower * 1.5) {
+        // Current usage significantly above average
+        pattern = 'Current usage significantly above average';
+        insight = `You're using ${((currentPower / avgPower - 1) * 100).toFixed(0)}% more power than your average of ${avgPower.toFixed(2)} kW.`;
+        recommendation = 'High power demand right now. Consider staggering the use of major appliances.';
+        confidence = 92;
+      } 
+      else if (currentPower < avgPower * 0.5) {
+        // Very low consumption
+        pattern = 'Very low consumption period';
+        insight = `Current usage is ${((1 - currentPower / avgPower) * 100).toFixed(0)}% below average. Energy efficiency is optimal.`;
+        recommendation = 'Perfect time for charging devices or running efficient appliances.';
+        confidence = 90;
+      } 
+      else {
+        // Stable consumption
+        pattern = 'Stable and consistent usage pattern';
+        insight = `Your consumption is steady at ${currentPower.toFixed(2)} kW, close to your average of ${avgPower.toFixed(2)} kW.`;
+        recommendation = 'Maintain current usage patterns. Monitor for any unusual spikes.';
+        confidence = 82;
+      }
+      
+      // Add time-based insights
+      const now = new Date();
+      const hour = now.getHours();
+      
+      if (hour >= 18 && hour <= 21 && currentPower > avgPower * 1.2) {
+        recommendation += ' Peak evening hours - consider delaying heavy appliance use to off-peak times (after 10 PM).';
+        confidence += 5;
+      }
+      
+      return { 
+        pattern, 
+        insight, 
+        recommendation, 
+        confidence: Math.min(confidence, 95) 
+      };
+    }
+
+    // Calculate trend using simple linear regression
+    function calculateTrend(values) {
+      if (values.length < 2) return 0;
+      
+      const n = values.length;
+      const indices = Array.from({ length: n }, (_, i) => i);
+      
+      const sumX = indices.reduce((a, b) => a + b, 0);
+      const sumY = values.reduce((a, b) => a + b, 0);
+      const sumXY = indices.reduce((sum, x, i) => sum + x * values[i], 0);
+      const sumXX = indices.reduce((sum, x) => sum + x * x, 0);
+      
+      const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+      return slope;
+    }
+
+    // Calculate volatility (standard deviation / mean)
+    function calculateVolatility(values) {
+      if (values.length < 2) return 0;
+      
+      const mean = values.reduce((a, b) => a + b, 0) / values.length;
+      const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
+      const stdDev = Math.sqrt(variance);
+      
+      return mean > 0 ? stdDev / mean : 0;
+    }
+    
     function setAccountType(type) {
       isPrincipalAccount = (type === 'principal');
 
