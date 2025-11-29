@@ -745,6 +745,36 @@
             </div>
           </div>
 
+          <!-- Usage trend / mini cards -->
+          <div class="card usage">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-weight:700">How's the consumption today?</div>
+              <div style="color:var(--muted);font-size:13px">Realtime • Live Data</div>
+            </div>
+          
+            <!-- Chart.js consumption graph -->
+            <div style="margin-top:12px;padding:12px;background:linear-gradient(180deg,#fff,#fbfdff);border-radius:8px">
+              <canvas id="consumptionChart" height="96"></canvas>
+            </div>
+          
+            <div class="mini-cards">
+              <div class="mini">
+                <p id="period1Label">Morning</p>
+                <strong id="period1Value">5 kWh</strong>
+              </div>
+              <div class="mini">
+                <p id="period2Label">Afternoon</p>
+                <strong id="period2Value">10 kWh</strong>
+              </div>
+              <div class="mini">
+                <p id="period3Label">Evening</p>
+                <strong id="period3Value">7 kWh</strong>
+              </div>
+            </div>
+          </div>
+          
+          </div>
+        
         <!-- RIGHT: side column -->
         <aside class="side-col">
 
